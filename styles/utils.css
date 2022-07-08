@@ -1,0 +1,4 @@
+.stage-rect-border {
+    border-image-source: linear-gradient(30deg, #464698, #eaaa40);
+    border-image-slice: 1;
+}
