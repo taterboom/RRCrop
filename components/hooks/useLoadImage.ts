@@ -32,6 +32,7 @@ export const useLoadImage = (src: string) => {
   useEffect(() => {
     dispatch({ type: "start" })
     const imgEl = new Image()
+    imgEl.setAttribute("crossorigin", "anonymous")
     const onload = () => {
       dispatch({
         type: "load",

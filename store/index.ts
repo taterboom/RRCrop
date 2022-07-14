@@ -49,3 +49,8 @@ export const currentActionState = atom<null | "w" | "h" | "l" | "t" | "r">({
   key: "currentActionState",
   default: null,
 })
+
+export const radiusHandlerDragDownState = atom<boolean>({
+  key: "radiusHandlerDragDownState",
+  default: false,
+})

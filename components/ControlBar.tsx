@@ -1,9 +1,18 @@
 import { useCallback, useEffect } from "react"
-import { useRecoilValue, useSetRecoilState } from "recoil"
-import { cropperState, imgState, stageState } from "../store"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { configState, cropperState, imgState, stageState } from "../store"
+import Handle from "./Handle"
 import { useLoadImage } from "./hooks/useLoadImage"
+import {
+  AntDesignFullscreenOutlined,
+  IconParkOutlinePreviewOpen,
+  IconParkPreviewCloseOne,
+  UilExport,
+} from "./icons"
+import Button from "./UI/Button"
 import { roundRect } from "./utils"
 
+// TODO Full JSON config
 const useExport = () => {
   const img = useRecoilValue(imgState)
   const cropper = useRecoilValue(cropperState)
@@ -12,7 +21,6 @@ const useExport = () => {
   const exportImg = useCallback(() => {
     if (imgLoadResult.data) {
       const canvasEl = document.createElement("canvas")
-      document.body.appendChild(canvasEl)
       canvasEl.width = cropper.width
       canvasEl.height = cropper.height
       const ctx = canvasEl.getContext("2d")
@@ -34,6 +42,10 @@ const useExport = () => {
         cropper.width,
         cropper.height
       )
+      const downloadTrigger = document.createElement("a")
+      downloadTrigger.href = canvasEl.toDataURL("png")
+      downloadTrigger.download = "rrcrop.png"
+      downloadTrigger.click()
     }
   }, [
     cropper.height,
@@ -49,29 +61,55 @@ const useExport = () => {
   return exportImg
 }
 
+const useFull = () => {
+  const setCropper = useSetRecoilState(cropperState)
+  const img = useRecoilValue(imgState)
+
+  return () => {
+    setCropper((v) => ({
+      ...v,
+      x: 0,
+      y: 0,
+      width: img.width,
+      height: img.height,
+      radius: 0,
+    }))
+  }
+}
+
 type ControlBarProps = {
   children?: React.ReactNode
 }
 
 const ControlBar = (props: ControlBarProps) => {
   const exportImg = useExport()
-  const setStageState = useSetRecoilState(stageState)
+  const [stage, setStageState] = useRecoilState(stageState)
+  const full = useFull()
   return (
-    <div className="flex items-center p-3 rounded-2xl bg-gray-100">
-      <div className=" p-2 rounded-lg bg-white">W</div>
-      <div className=" ml-2 p-2 rounded-lg bg-white">H</div>
-      <div className=" ml-2 p-2 rounded-lg bg-white">L</div>
-      <div className=" ml-2 p-2 rounded-lg bg-white">T</div>
-      <div className=" ml-2 p-2 rounded-lg bg-white">R</div>
-      <div className=" flex-1"></div>
-      <div
-        className=" ml-2 p-2 rounded-lg bg-white justify-items-end"
-        onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}
-      >
-        P
-      </div>
-      <div className=" ml-2 p-2 rounded-lg bg-white justify-items-end" onClick={() => exportImg()}>
-        E
+    <div className="fixed bottom-4 left-1/2 w-full max-w-[768px] p-2 -translate-x-1/2">
+      <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
+        <div className="w-0 flex-1 ">
+          <div>
+            <Button onClick={() => full()}>
+              <AntDesignFullscreenOutlined />
+            </Button>
+          </div>
+        </div>
+        <div>
+          <Handle></Handle>
+        </div>
+        <div className="w-0 flex-1">
+          <div className=" text-right">
+            <Button onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}>
+              {stage.preview ? <IconParkOutlinePreviewOpen /> : <IconParkPreviewCloseOne />}
+            </Button>
+          </div>
+          <div className=" text-right mt-2">
+            <Button onClick={() => exportImg()}>
+              <UilExport />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   )

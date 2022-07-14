@@ -1,38 +1,44 @@
 import { useRecoilState, useRecoilValue } from "recoil"
-import { configState, cropperState, imgState, stageState } from "../store"
+import {
+  configState,
+  cropperState,
+  imgState,
+  radiusHandlerDragDownState,
+  stageState,
+} from "../store"
 import { useDrag } from "@use-gesture/react"
 import clsx from "classnames"
 import { getFixedAndMovablePoint, rectBottom, rectLeft, rectRight, rectTop } from "./utils"
 import { useDragBounds, useLocalDragBounds } from "./hooks/useDragBounds"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
-type CornerProps = {
+type RadiusHandlerProps = {
   children?: React.ReactNode
   type: 0b00 | 0b01 | 0b10 | 0b11
 }
 
-const Corner = (props: CornerProps) => {
+const RadiusHandler = (props: RadiusHandlerProps) => {
   const isLeft = (props.type & 0b10) === 0b10
   const isTop = (props.type & 0b01) === 0b01
 
   const [cropper, setCropper] = useRecoilState(cropperState)
   const config = useRecoilValue(configState)
-
-  const bindTopLeft = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b11))
-
-  const bindTopRight = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b01))
-
-  const bindBottomLeft = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b10))
-
-  const bindBottomRight = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b00))
+  const [radiusHandlerDragDown, setRadiusHandlerDragDown] = useRecoilState(
+    radiusHandlerDragDownState
+  )
 
   const maxRadius = useMemo(
     () => Math.min(cropper.width / 2, cropper.height / 2),
     [cropper.height, cropper.width]
   )
+  const minDisplayRadius = useMemo(
+    () => Math.max(cropper.radius, config.initialRaidus),
+    [config.initialRaidus, cropper.radius]
+  )
 
   const bindTopLeftRadius = useDrag(
     ({ down, offset }) => {
+      setRadiusHandlerDragDown(down)
       if (!down) return
       const nextRaidus = (offset[0] + offset[1]) / 2
       setCropper((v) => ({
@@ -42,7 +48,7 @@ const Corner = (props: CornerProps) => {
     },
     {
       preventDefault: true,
-      from: [cropper.radius, cropper.radius],
+      from: [minDisplayRadius, minDisplayRadius],
       bounds: {
         left: 0,
         right: maxRadius,
@@ -54,6 +60,7 @@ const Corner = (props: CornerProps) => {
 
   const bindTopRightRadius = useDrag(
     ({ down, offset }) => {
+      setRadiusHandlerDragDown(down)
       if (!down) return
       const nextRaidus = (cropper.width - offset[0] + offset[1]) / 2
       setCropper((v) => ({
@@ -63,7 +70,7 @@ const Corner = (props: CornerProps) => {
     },
     {
       preventDefault: true,
-      from: [cropper.width - cropper.radius, cropper.radius],
+      from: [cropper.width - minDisplayRadius, minDisplayRadius],
       bounds: {
         left: maxRadius,
         right: cropper.width,
@@ -75,6 +82,7 @@ const Corner = (props: CornerProps) => {
 
   const bindBottomLeftRadius = useDrag(
     ({ down, offset }) => {
+      setRadiusHandlerDragDown(down)
       if (!down) return
       const nextRaidus = (offset[0] + (cropper.height - offset[1])) / 2
       setCropper((v) => ({
@@ -84,7 +92,7 @@ const Corner = (props: CornerProps) => {
     },
     {
       preventDefault: true,
-      from: [cropper.radius, cropper.height - cropper.radius],
+      from: [minDisplayRadius, cropper.height - minDisplayRadius],
       bounds: {
         left: 0,
         right: maxRadius,
@@ -96,6 +104,7 @@ const Corner = (props: CornerProps) => {
 
   const bindBottomRightRadius = useDrag(
     ({ down, offset }) => {
+      setRadiusHandlerDragDown(down)
       if (!down) return
       const nextRaidus = (cropper.width - offset[0] + (cropper.height - offset[1])) / 2
       setCropper((v) => ({
@@ -105,7 +114,7 @@ const Corner = (props: CornerProps) => {
     },
     {
       preventDefault: true,
-      from: [cropper.width - cropper.radius, cropper.height - cropper.radius],
+      from: [cropper.width - minDisplayRadius, cropper.height - minDisplayRadius],
       bounds: {
         left: maxRadius,
         right: cropper.width,
@@ -115,23 +124,16 @@ const Corner = (props: CornerProps) => {
     }
   )
 
+  const displayRadius = radiusHandlerDragDown ? cropper.radius : minDisplayRadius
+  const h = (isLeft ? 1 : -1) * displayRadius
+  const v = (isTop ? 1 : -1) * displayRadius
+
   return (
     <>
-      {/* handle for position */}
-      <div
-        className="absolute w-2 h-2 border border-black -translate-x-1/2 -translate-y-1/2 touch-none"
-        {...(props.type == 0b11 && bindTopLeft())}
-        {...(props.type == 0b01 && bindTopRight())}
-        {...(props.type == 0b10 && bindBottomLeft())}
-        {...(props.type == 0b00 && bindBottomRight())}
-        style={{
-          left: isLeft ? 0 : "100%",
-          top: isTop ? 0 : "100%",
-        }}
-      ></div>
       {/* handle for radius */}
+      {/* down的时候才能比min小，from不能比min小 */}
       <div
-        className="absolute w-2 h-2 border border-black rounded-full touch-none"
+        className="absolute w-2 h-2 border border-midnight-blue bg-air-blue/60 rounded-full touch-none rotate-45"
         {...(props.type === 0b11 && bindTopLeftRadius())}
         {...(props.type === 0b01 && bindTopRightRadius())}
         {...(props.type === 0b10 && bindBottomLeftRadius())}
@@ -139,9 +141,46 @@ const Corner = (props: CornerProps) => {
         style={{
           left: isLeft ? 0 : "100%",
           top: isTop ? 0 : "100%",
-          transform: `translate(${
-            (isLeft ? cropper.radius : -cropper.radius) - config.borderRadiusHandleRadius
-          }px, ${(isTop ? cropper.radius : -cropper.radius) - config.borderRadiusHandleRadius}px)`,
+          transform: `translate(${h - config.borderRadiusHandleRadius}px, ${
+            v - config.borderRadiusHandleRadius
+          }px)`,
+        }}
+      ></div>
+    </>
+  )
+}
+
+type CornerHandlerProps = {
+  children?: React.ReactNode
+  type: 0b00 | 0b01 | 0b10 | 0b11
+}
+
+const CornerHandler = (props: CornerHandlerProps) => {
+  const isLeft = (props.type & 0b10) === 0b10
+  const isTop = (props.type & 0b01) === 0b01
+
+  const [cropper, setCropper] = useRecoilState(cropperState)
+
+  const bindTopLeft = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b11))
+
+  const bindTopRight = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b01))
+
+  const bindBottomLeft = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b10))
+
+  const bindBottomRight = useLocalDragBounds(getFixedAndMovablePoint(cropper, 0b00))
+
+  return (
+    <>
+      {/* handle for position */}
+      <div
+        className="absolute w-2 h-2 border border-midnight-blue bg-air-blue -translate-x-1/2 -translate-y-1/2 touch-none"
+        {...(props.type == 0b11 && bindTopLeft())}
+        {...(props.type == 0b01 && bindTopRight())}
+        {...(props.type == 0b10 && bindBottomLeft())}
+        {...(props.type == 0b00 && bindBottomRight())}
+        style={{
+          left: isLeft ? 0 : "100%",
+          top: isTop ? 0 : "100%",
         }}
       ></div>
     </>
@@ -181,7 +220,7 @@ const Cropper = (props: CropperProps) => {
 
   return (
     <>
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-md"></div>
+      <div className="absolute inset-0 bg-white/30 backdrop-blur"></div>
       <div
         className="absolute"
         style={{
@@ -215,7 +254,7 @@ const Cropper = (props: CropperProps) => {
         </div>
         {/* corner border outline */}
         <div
-          className={clsx("absolute inset-0 border border-black", {
+          className={clsx("absolute inset-0 border border-midnight-blue", {
             hidden: stage.preview,
           })}
           style={{
@@ -225,9 +264,12 @@ const Cropper = (props: CropperProps) => {
         {/* rect outline */}
         <div
           {...bind()}
-          className={clsx("absolute inset-0 border border-black transition-all touch-none", {
-            hidden: stage.preview,
-          })}
+          className={clsx(
+            "absolute inset-0 border border-midnight-blue transition-all touch-none",
+            {
+              hidden: stage.preview,
+            }
+          )}
         ></div>
         {/* control point */}
         <div
@@ -236,7 +278,10 @@ const Cropper = (props: CropperProps) => {
           })}
         >
           {[...new Array(4)].map((_, index) => (
-            <Corner key={index} type={index as CornerProps["type"]}></Corner>
+            <CornerHandler key={index} type={index as CornerHandlerProps["type"]}></CornerHandler>
+          ))}
+          {[...new Array(4)].map((_, index) => (
+            <RadiusHandler key={index} type={index as CornerHandlerProps["type"]}></RadiusHandler>
           ))}
         </div>
       </div>

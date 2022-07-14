@@ -11,6 +11,13 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+body{
+  min-height: 100vh;
+  @apply text-midnight-blue;
+  background-image: linear-gradient(-45deg, transparent, rgba(0,0,0,0.3));
+  background-repeat: no-repeat;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -18,4 +25,8 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+body {
+  @apply bg-prussian-blue
 }

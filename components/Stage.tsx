@@ -23,7 +23,7 @@ const Raw = (props: RawProps) => {
         naturalWidth,
         naturalHeight,
         document.documentElement.clientWidth - 16 * 2,
-        document.documentElement.clientHeight - 16 * 2
+        document.documentElement.clientHeight - 240 // TODO
       )
       setImg({
         src: props.src,
@@ -58,7 +58,7 @@ const Raw = (props: RawProps) => {
       {result.loading && "loading..."}
       <div className="text-center">
         <div
-          className="relative inline-block border-8 stage-rect-border box-content"
+          className="relative inline-block box-content border-8 border-air-blue"
           style={{
             width: img.width,
             height: img.height,
@@ -82,7 +82,7 @@ const Raw = (props: RawProps) => {
 
 const Stage = () => (
   <div>
-    <Raw src="https://s3.bmp.ovh/imgs/2022/06/30/112a2f62ab1411db.jpeg"></Raw>
+    <Raw src="https://s3.bmp.ovh/imgs/2022/06/30/112a2f62ab1411db.jpeg?not-from-cache-please"></Raw>
   </div>
 )
 

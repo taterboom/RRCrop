@@ -1,7 +1,27 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { configState, cropperState, imgState } from "../store"
 import { usePressRepeatly } from "./hooks/usePressRepeatly"
-import { rectBottom, rectLeft, rectRight, rectTop } from "./utils"
+import { MaterialSymbolsArrow } from "./icons"
+import Button, { ButtonProps } from "./UI/Button"
+import { rectBottom, rectLeft, rectRight, rectTop, roundRect } from "./utils"
+import clsx from "classnames"
+
+const DIR_BORDER_RADIUS = {
+  up: "!rounded-t",
+  down: "!rounded-b",
+  left: "!rounded-l",
+  right: "!rounded-r",
+}
+const HandleButton = (props: ButtonProps & { dir: "up" | "down" | "left" | "right" }) => {
+  return (
+    <Button
+      className={clsx("!m-0 !p-0 !rounded-none !border-none", DIR_BORDER_RADIUS[props.dir])}
+      {...props}
+    >
+      <MaterialSymbolsArrow dir={props.dir}></MaterialSymbolsArrow>
+    </Button>
+  )
+}
 
 type HandleProps = {
   children?: React.ReactNode
@@ -88,23 +108,25 @@ const Handle = (props: HandleProps) => {
       }
     })
   )
+
   return (
-    <div className="relative w-[300px] h-[100px] mt-4 mx-auto">
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 flex">
-        <div {...leftLeadingHandlers}>⬅️</div>
-        <div {...leftTrailingHandlers}>➡️</div>
+    <div className="relative w-[200px] h-[80px] m-4 mx-auto border border-midnight-blue select-none">
+      {/* four border */}
+      <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 flex select-none">
+        <HandleButton dir="left" {...leftLeadingHandlers}></HandleButton>
+        <HandleButton dir="right" {...leftTrailingHandlers}></HandleButton>
       </div>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2">
-        <div {...topLeadingHandlers}>⬆️</div>
-        <div {...topTrailingHandlers}>⬇️</div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col">
+        <HandleButton dir="up" {...topLeadingHandlers}></HandleButton>
+        <HandleButton dir="down" {...topTrailingHandlers}></HandleButton>
       </div>
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 flex">
-        <div {...rightLeadingHandlers}>⬅️</div>
-        <div {...rightTrailingHandlers}>➡️</div>
+      <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 flex">
+        <HandleButton dir="left" {...rightLeadingHandlers}></HandleButton>
+        <HandleButton dir="right" {...rightTrailingHandlers}></HandleButton>
       </div>
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-        <div {...bottomLeadingHandlers}>⬆️</div>
-        <div {...bottomTrailingHandlers}>⬇️</div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 flex flex-col">
+        <HandleButton dir="up" {...bottomLeadingHandlers}></HandleButton>
+        <HandleButton dir="down" {...bottomTrailingHandlers}></HandleButton>
       </div>
     </div>
   )
