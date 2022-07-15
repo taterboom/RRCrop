@@ -82,7 +82,7 @@ const Raw = (props: RawProps) => {
 
 const Stage = () => (
   <div>
-    <Raw src="https://s3.bmp.ovh/imgs/2022/06/30/112a2f62ab1411db.jpeg?not-from-cache-please"></Raw>
+    <Raw src="/taichi.jpeg"></Raw>
   </div>
 )
 
