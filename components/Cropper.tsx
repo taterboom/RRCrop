@@ -133,7 +133,7 @@ const RadiusHandler = (props: RadiusHandlerProps) => {
       {/* handle for radius */}
       {/* down的时候才能比min小，from不能比min小 */}
       <div
-        className="absolute w-2 h-2 border border-midnight-blue bg-air-blue/60 rounded-full touch-none rotate-45"
+        className="area-append absolute w-2 h-2 border border-midnight-blue bg-air-blue/60 rounded-full touch-none rotate-45"
         {...(props.type === 0b11 && bindTopLeftRadius())}
         {...(props.type === 0b01 && bindTopRightRadius())}
         {...(props.type === 0b10 && bindBottomLeftRadius())}
@@ -173,7 +173,7 @@ const CornerHandler = (props: CornerHandlerProps) => {
     <>
       {/* handle for position */}
       <div
-        className="absolute w-2 h-2 border border-midnight-blue bg-air-blue -translate-x-1/2 -translate-y-1/2 touch-none"
+        className="area-append absolute w-2 h-2 border border-midnight-blue bg-air-blue -translate-x-1/2 -translate-y-1/2 touch-none"
         {...(props.type == 0b11 && bindTopLeft())}
         {...(props.type == 0b01 && bindTopRight())}
         {...(props.type == 0b10 && bindBottomLeft())}
@@ -189,6 +189,7 @@ const CornerHandler = (props: CornerHandlerProps) => {
 
 type CropperProps = {
   children?: React.ReactNode
+  onTap?: () => void
 }
 
 const Cropper = (props: CropperProps) => {
@@ -197,7 +198,10 @@ const Cropper = (props: CropperProps) => {
   const stage = useRecoilValue(stageState)
 
   const bind = useDrag(
-    ({ down, offset }) => {
+    ({ down, offset, tap }) => {
+      if (tap) {
+        props.onTap?.()
+      }
       if (!down) return
       const nextPosition = offset
       setCropper((v) => ({
@@ -215,6 +219,7 @@ const Cropper = (props: CropperProps) => {
         right: img.width - cropper.width,
         bottom: img.height - cropper.height,
       },
+      filterTaps: true,
     }
   )
 
@@ -239,7 +244,7 @@ const Cropper = (props: CropperProps) => {
         >
           {/* the raw img over the mask */}
           <img
-            className="absolute max-w-none bg-white"
+            className="absolute max-w-none"
             src={img.src}
             alt="the pic to be cropped"
             width={img.width}

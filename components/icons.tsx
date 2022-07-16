@@ -109,3 +109,22 @@ export function UilExport(props: SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
+
+export function IconParkOutlineClear(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      width="1em"
+      height="1em"
+      viewBox="0 0 48 48"
+      {...props}
+    >
+      <g fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="4">
+        <path strokeLinecap="round" d="M20 5.914h8v8h15v8H5v-8h15v-8Z" clipRule="evenodd"></path>
+        <path d="M8 40h32V22H8v18Z"></path>
+        <path strokeLinecap="round" d="M16 39.898v-5.984m8 5.984v-6m8 6v-5.984M12 40h24"></path>
+      </g>
+    </svg>
+  )
+}

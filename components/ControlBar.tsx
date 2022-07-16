@@ -1,10 +1,11 @@
 import { useCallback, useEffect } from "react"
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
 import { configState, cropperState, imgState, stageState } from "../store"
 import Handle from "./Handle"
 import { useLoadImage } from "./hooks/useLoadImage"
 import {
   AntDesignFullscreenOutlined,
+  IconParkOutlineClear,
   IconParkOutlinePreviewOpen,
   IconParkPreviewCloseOne,
   UilExport,
@@ -84,14 +85,33 @@ type ControlBarProps = {
 const ControlBar = (props: ControlBarProps) => {
   const exportImg = useExport()
   const [stage, setStageState] = useRecoilState(stageState)
+  const resetImgState = useResetRecoilState(imgState)
+  const resetCropperState = useResetRecoilState(cropperState)
+  const resetStageState = useResetRecoilState(stageState)
   const full = useFull()
   return (
     <div className="fixed bottom-4 left-1/2 w-full max-w-[768px] p-2 -translate-x-1/2">
       <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
         <div className="w-0 flex-1 ">
           <div>
+            <Button onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}>
+              {stage.preview ? <IconParkOutlinePreviewOpen /> : <IconParkPreviewCloseOne />}
+            </Button>
+          </div>
+          <div className=" mt-2">
             <Button onClick={() => full()}>
               <AntDesignFullscreenOutlined />
+            </Button>
+          </div>
+          <div className=" mt-2">
+            <Button
+              onClick={() => {
+                resetCropperState()
+                resetImgState()
+                resetStageState()
+              }}
+            >
+              <IconParkOutlineClear />
             </Button>
           </div>
         </div>
@@ -99,11 +119,6 @@ const ControlBar = (props: ControlBarProps) => {
           <Handle></Handle>
         </div>
         <div className="w-0 flex-1">
-          <div className=" text-right">
-            <Button onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}>
-              {stage.preview ? <IconParkOutlinePreviewOpen /> : <IconParkPreviewCloseOne />}
-            </Button>
-          </div>
           <div className=" text-right mt-2">
             <Button onClick={() => exportImg()}>
               <UilExport />

@@ -1,4 +1,9 @@
+import { CONTAINER_H_WHITE_SPACE, CONTAINER_V_WHITE_SPACE } from "../constants"
 import { Point, Rect } from "../types/graph"
+
+export function inBrowser() {
+  return typeof window !== "undefined"
+}
 
 export function scaleRect(rect: Rect, times: number) {
   const scaleWidth = rect.width * times
@@ -30,6 +35,22 @@ export function containSize(
     const outputWidth = outputHeight * inputRatio
     return [outputWidth, outputHeight]
   }
+}
+
+export function containSizeInDocment(naturalWidth: number, naturalHeight: number) {
+  if (!inBrowser()) return [0, 0]
+  console.log(
+    naturalWidth,
+    naturalHeight,
+    document.documentElement.clientWidth,
+    document.documentElement.clientHeight
+  )
+  return containSize(
+    naturalWidth,
+    naturalHeight,
+    document.documentElement.clientWidth - CONTAINER_H_WHITE_SPACE,
+    document.documentElement.clientHeight - CONTAINER_V_WHITE_SPACE
+  )
 }
 
 export function roundRect(

@@ -1,6 +1,6 @@
 import { Reducer, useEffect, useReducer } from "react"
 
-export const useLoadImage = (src: string) => {
+export const useLoadImage = (src?: string) => {
   const [state, dispatch] = useReducer<
     Reducer<
       {
@@ -30,6 +30,7 @@ export const useLoadImage = (src: string) => {
     }
   )
   useEffect(() => {
+    if (!src) return
     dispatch({ type: "start" })
     const imgEl = new Image()
     imgEl.setAttribute("crossorigin", "anonymous")

@@ -1,36 +1,38 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
-import { configState, cropperState, imgState, stageState } from "../store"
+import { configState, cropperState, imgState, isInitialSelector, stageState } from "../store"
 import Cropper from "./Cropper"
 import { useLoadImage } from "./hooks/useLoadImage"
-import { containSize, scaleRect } from "./utils"
+import { containSize, containSizeInDocment, scaleRect } from "./utils"
 import clsx from "classnames"
 
 type RawProps = {
-  src: string
+  // src?: string
 }
 
 const Raw = (props: RawProps) => {
+  const [inputSrc, setInputSrc] = useState<string>()
   const [img, setImg] = useRecoilState(imgState)
   const setCropper = useSetRecoilState(cropperState)
-  const stage = useRecoilValue(stageState)
+  const [stage, setStage] = useRecoilState(stageState)
   const config = useRecoilValue(configState)
-  const result = useLoadImage(props.src)
+  const isInitial = useRecoilValue(isInitialSelector)
+  const result = useLoadImage(inputSrc)
   useEffect(() => {
     if (result.data) {
       const { naturalWidth, naturalHeight } = result.data
-      const [displayWidth, displayHeight] = containSize(
-        naturalWidth,
-        naturalHeight,
-        document.documentElement.clientWidth - 16 * 2,
-        document.documentElement.clientHeight - 240 // TODO
-      )
+      const [displayWidth, displayHeight] = containSizeInDocment(naturalWidth, naturalHeight)
       setImg({
-        src: props.src,
+        src: inputSrc!,
         width: displayWidth,
         height: displayHeight,
         naturalWidth,
         naturalHeight,
+      })
+      setStage({
+        preview: false,
+        width: displayWidth,
+        height: displayHeight,
       })
       const scaledRect = scaleRect(
         {
@@ -55,25 +57,45 @@ const Raw = (props: RawProps) => {
   }, [result.data])
   return (
     <div>
-      {result.loading && "loading..."}
       <div className="text-center">
         <div
           className="relative inline-block box-content border-8 border-air-blue"
           style={{
-            width: img.width,
-            height: img.height,
+            width: stage.width,
+            height: stage.height,
           }}
         >
-          <img
-            className={clsx("block transition-all", {
-              hidden: stage.preview,
-            })}
-            src={img.src}
-            alt="the pic to be cropped"
-            width={img.width}
-            height={img.height}
-          ></img>
-          <Cropper></Cropper>
+          {result.loading && "loading..."}
+          {img.src && (
+            <>
+              <img
+                className={clsx("block transition-all", {
+                  hidden: stage.preview,
+                })}
+                src={img.src}
+                alt="the pic to be cropped"
+                width={img.width}
+                height={img.height}
+              ></img>
+              <Cropper
+                onTap={() => {
+                  console.log(isInitial)
+                  if (isInitial) {
+                    const inputEl = document.createElement("input")
+                    inputEl.type = "file"
+                    inputEl.accept = ".jpg,.jpeg,.png"
+                    inputEl.addEventListener("change", (e) => {
+                      console.log(inputEl.files)
+                      if (inputEl.files?.[0]) {
+                        setInputSrc(URL.createObjectURL(inputEl.files[0]))
+                      }
+                    })
+                    inputEl.click()
+                  }
+                }}
+              ></Cropper>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -82,7 +104,7 @@ const Raw = (props: RawProps) => {
 
 const Stage = () => (
   <div>
-    <Raw src="/taichi.jpeg"></Raw>
+    <Raw></Raw>
   </div>
 )
 
