@@ -90,7 +90,7 @@ const ControlBar = (props: ControlBarProps) => {
   const resetStageState = useResetRecoilState(stageState)
   const full = useFull()
   return (
-    <div className="fixed bottom-4 left-1/2 w-full max-w-[768px] p-2 -translate-x-1/2">
+    <div className="fixed bottom-4 left-1/2 w-full max-w-[768px] p-4 -translate-x-1/2">
       <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
         <div className="w-0 flex-1 ">
           <div>
