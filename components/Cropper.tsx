@@ -227,6 +227,7 @@ const Cropper = (props: CropperProps) => {
     <>
       <div className="absolute inset-0 bg-white/30 backdrop-blur"></div>
       <div
+        id="cropper"
         className="absolute"
         style={{
           left: cropper.x,

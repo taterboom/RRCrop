@@ -1,6 +1,7 @@
-import { useCallback, useEffect } from "react"
+import { useCallback, useRef, useState } from "react"
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil"
-import { configState, cropperState, imgState, stageState } from "../store"
+import { cropperState, imgState, stageState } from "../store"
+import { Rect } from "../types/graph"
 import Handle from "./Handle"
 import { useLoadImage } from "./hooks/useLoadImage"
 import {
@@ -11,7 +12,9 @@ import {
   UilExport,
 } from "./icons"
 import Button from "./UI/Button"
-import { roundRect } from "./utils"
+import Popup from "./UI/Popup"
+import WithEl from "./UI/WithEl"
+import { containSizeInDocment, roundRect } from "./utils"
 
 // TODO Full JSON config
 const useExport = () => {
@@ -21,32 +24,42 @@ const useExport = () => {
 
   const exportImg = useCallback(() => {
     if (imgLoadResult.data) {
+      const compressRatio = img.width / img.naturalWidth
+      const naturalSize = (size: number) => size / compressRatio
       const canvasEl = document.createElement("canvas")
-      canvasEl.width = cropper.width
-      canvasEl.height = cropper.height
+      canvasEl.width = naturalSize(cropper.width)
+      canvasEl.height = naturalSize(cropper.height)
       const ctx = canvasEl.getContext("2d")
       if (!ctx) {
         alert("Unsupport Canvas")
         return
       }
-      roundRect(ctx, 0, 0, cropper.width, cropper.height, cropper.radius)
+      roundRect(
+        ctx,
+        0,
+        0,
+        naturalSize(cropper.width),
+        naturalSize(cropper.height),
+        naturalSize(cropper.radius)
+      )
       ctx.clip()
-      const compressRatio = img.width / img.naturalWidth
       ctx.drawImage(
         imgLoadResult.data,
-        cropper.x / compressRatio,
-        cropper.y / compressRatio,
-        cropper.width / compressRatio,
-        cropper.height / compressRatio,
+        naturalSize(cropper.x),
+        naturalSize(cropper.y),
+        naturalSize(cropper.width),
+        naturalSize(cropper.height),
         0,
         0,
-        cropper.width,
-        cropper.height
+        naturalSize(cropper.width),
+        naturalSize(cropper.height)
       )
       const downloadTrigger = document.createElement("a")
       downloadTrigger.href = canvasEl.toDataURL("png")
-      downloadTrigger.download = "rrcrop.png"
+      downloadTrigger.download = `rrcrop-${Date.now()}.png`
       downloadTrigger.click()
+
+      return canvasEl
     }
   }, [
     cropper.height,
@@ -83,50 +96,97 @@ type ControlBarProps = {
 }
 
 const ControlBar = (props: ControlBarProps) => {
-  const exportImg = useExport()
   const [stage, setStageState] = useRecoilState(stageState)
   const resetImgState = useResetRecoilState(imgState)
   const resetCropperState = useResetRecoilState(cropperState)
   const resetStageState = useResetRecoilState(stageState)
   const full = useFull()
+  const exportImg = useExport()
+  const [exportImgPopupVisible, setExportImgPopupVisible] = useState(false)
+  const currentExportImgCanvasElRef = useRef<HTMLCanvasElement>()
+  const cropperFromAndToRef = useRef<{ from: Rect; to: Rect }>({
+    from: { x: 0, y: 0, width: 0, height: 0 },
+    to: { x: 0, y: 0, width: 0, height: 0 },
+  })
+  const onExport = () => {
+    currentExportImgCanvasElRef.current = exportImg()!
+    const cropperEl = document.getElementById("cropper")!
+    const cropperElRect = cropperEl.getBoundingClientRect()
+    const from = {
+      x: cropperElRect.x,
+      y: cropperElRect.y,
+      width: cropperElRect.width,
+      height: cropperElRect.height,
+    }
+    const toSize = containSizeInDocment(
+      currentExportImgCanvasElRef.current.width,
+      currentExportImgCanvasElRef.current.height
+    )
+    const to = {
+      x: (document.documentElement.clientWidth - toSize[0]) / 2,
+      y: (document.documentElement.clientHeight - toSize[1]) / 2,
+      width: toSize[0],
+      height: toSize[1],
+    }
+    cropperFromAndToRef.current = {
+      from,
+      to,
+    }
+    setExportImgPopupVisible(true)
+  }
+
   return (
-    <div className="fixed bottom-4 left-1/2 w-full max-w-[768px] p-4 -translate-x-1/2">
-      <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
-        <div className="w-0 flex-1 ">
+    <>
+      <div className="fixed bottom-4 left-1/2 w-full max-w-[768px] p-4 -translate-x-1/2">
+        <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
+          <div className="w-0 flex-1 ">
+            <div>
+              <Button onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}>
+                {stage.preview ? <IconParkOutlinePreviewOpen /> : <IconParkPreviewCloseOne />}
+              </Button>
+            </div>
+            <div className=" mt-2">
+              <Button onClick={() => full()}>
+                <AntDesignFullscreenOutlined />
+              </Button>
+            </div>
+            <div className=" mt-2">
+              <Button
+                onClick={() => {
+                  resetCropperState()
+                  resetImgState()
+                  resetStageState()
+                }}
+              >
+                <IconParkOutlineClear />
+              </Button>
+            </div>
+          </div>
           <div>
-            <Button onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}>
-              {stage.preview ? <IconParkOutlinePreviewOpen /> : <IconParkPreviewCloseOne />}
-            </Button>
+            <Handle></Handle>
           </div>
-          <div className=" mt-2">
-            <Button onClick={() => full()}>
-              <AntDesignFullscreenOutlined />
-            </Button>
-          </div>
-          <div className=" mt-2">
-            <Button
-              onClick={() => {
-                resetCropperState()
-                resetImgState()
-                resetStageState()
-              }}
-            >
-              <IconParkOutlineClear />
-            </Button>
-          </div>
-        </div>
-        <div>
-          <Handle></Handle>
-        </div>
-        <div className="w-0 flex-1">
-          <div className=" text-right mt-2">
-            <Button onClick={() => exportImg()}>
-              <UilExport />
-            </Button>
+          <div className="w-0 flex-1">
+            <div className=" text-right mt-2">
+              <Button onClick={() => onExport()}>
+                <UilExport />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <Popup
+        show={exportImgPopupVisible}
+        place={{
+          from: cropperFromAndToRef.current?.from,
+          to: cropperFromAndToRef.current?.to,
+        }}
+        tips="If the download doesn't start, long press the image to save"
+        onClose={() => setExportImgPopupVisible(false)}
+      >
+        <WithEl el={currentExportImgCanvasElRef.current!}></WithEl>
+      </Popup>
+    </>
   )
 }
 
