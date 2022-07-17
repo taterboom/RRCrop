@@ -66,7 +66,7 @@ const Popup = (props: PopupProps) => {
   return (
     <div className="fixed inset-0 z-50">
       <animated.div
-        className="fixed inset-0 backdrop-blur-3xl"
+        className="fixed inset-0 bg-black/30 backdrop-blur-2xl"
         style={{
           opacity: styles.number,
         }}
