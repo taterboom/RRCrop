@@ -59,7 +59,10 @@ const useExport = () => {
       downloadTrigger.download = `rrcrop-${Date.now()}.png`
       downloadTrigger.click()
 
-      return canvasEl
+      return {
+        href: downloadTrigger.href,
+        canvasEl,
+      }
     }
   }, [
     cropper.height,
@@ -103,13 +106,13 @@ const ControlBar = (props: ControlBarProps) => {
   const full = useFull()
   const exportImg = useExport()
   const [exportImgPopupVisible, setExportImgPopupVisible] = useState(false)
-  const currentExportImgCanvasElRef = useRef<HTMLCanvasElement>()
+  const currentExportImgResultRef = useRef<ReturnType<typeof exportImg>>()
   const cropperFromAndToRef = useRef<{ from: Rect; to: Rect }>({
     from: { x: 0, y: 0, width: 0, height: 0 },
     to: { x: 0, y: 0, width: 0, height: 0 },
   })
   const onExport = () => {
-    currentExportImgCanvasElRef.current = exportImg()!
+    currentExportImgResultRef.current = exportImg()!
     const cropperEl = document.getElementById("cropper")!
     const cropperElRect = cropperEl.getBoundingClientRect()
     const from = {
@@ -119,8 +122,8 @@ const ControlBar = (props: ControlBarProps) => {
       height: cropperElRect.height,
     }
     const toSize = containSizeInDocment(
-      currentExportImgCanvasElRef.current.width,
-      currentExportImgCanvasElRef.current.height
+      currentExportImgResultRef.current.canvasEl.width,
+      currentExportImgResultRef.current.canvasEl.height
     )
     const to = {
       x: (document.documentElement.clientWidth - toSize[0]) / 2,
@@ -184,7 +187,7 @@ const ControlBar = (props: ControlBarProps) => {
         tips="If the download doesn't start, long press the image to save"
         onClose={() => setExportImgPopupVisible(false)}
       >
-        <WithEl el={currentExportImgCanvasElRef.current!}></WithEl>
+        <img src={currentExportImgResultRef.current?.href} />
       </Popup>
     </>
   )

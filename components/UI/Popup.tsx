@@ -64,7 +64,7 @@ const Popup = (props: PopupProps) => {
   }, [props.show])
   if (!visible) return null
   return (
-    <div className="fixed z-50">
+    <div className="fixed inset-0 z-50">
       <animated.div
         className="fixed inset-0 backdrop-blur-3xl"
         style={{
