@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil"
 import { containSizeInDocment, scaleRect } from "../components/utils"
-import { PLACEMENT_HEIGHT, PLACEMENT_WIDTH } from "../constants"
+import { PLACEMENT_HEIGHT, PLACEMENT_IMG, PLACEMENT_WIDTH } from "../constants"
 
 const placementSize = containSizeInDocment(PLACEMENT_WIDTH, PLACEMENT_HEIGHT)
 
@@ -11,13 +11,13 @@ const placementCropperScaledRect = scaleRect(
     width: placementSize[0],
     height: placementSize[1],
   },
-  0.8
+  0.76
 )
 
 export const imgState = atom({
   key: "imgState",
   default: {
-    src: "/taichi.jpeg",
+    src: PLACEMENT_IMG,
     width: placementSize[0],
     height: placementSize[1],
     naturalWidth: PLACEMENT_WIDTH,
@@ -32,12 +32,12 @@ export const cropperState = atom({
     initialY: placementCropperScaledRect.y,
     initialWidth: placementCropperScaledRect.width,
     initialHeight: placementCropperScaledRect.height,
-    initialRadius: 16,
+    initialRadius: 24,
     x: placementCropperScaledRect.x,
     y: placementCropperScaledRect.y,
     width: placementCropperScaledRect.width,
     height: placementCropperScaledRect.height,
-    radius: 16,
+    radius: 24,
   },
 })
 
@@ -74,6 +74,6 @@ export const radiusHandlerDragDownState = atom<boolean>({
 export const isInitialSelector = selector({
   key: "isInitialSelector",
   get: ({ get }) => {
-    return get(imgState).src === "/taichi.jpeg"
+    return get(imgState).src === PLACEMENT_IMG
   },
 })

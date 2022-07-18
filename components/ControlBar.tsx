@@ -6,6 +6,7 @@ import Handle from "./Handle"
 import { useLoadImage } from "./hooks/useLoadImage"
 import {
   AntDesignFullscreenOutlined,
+  IconParkDownPicture,
   IconParkOutlineClear,
   IconParkOutlinePreviewOpen,
   IconParkPreviewCloseOne,
@@ -169,9 +170,9 @@ const ControlBar = (props: ControlBarProps) => {
             <Handle></Handle>
           </div>
           <div className="w-0 flex-1">
-            <div className=" text-right mt-2">
+            <div className=" text-right">
               <Button onClick={() => onExport()}>
-                <UilExport />
+                <IconParkDownPicture />
               </Button>
             </div>
           </div>
