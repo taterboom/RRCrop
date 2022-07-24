@@ -8,8 +8,12 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>RRCrop</title>
-        <meta name="description" content="rounded rect crop image" />
+        <title>Rounded Rectangle Image Cropping - RRCrop</title>
+        <meta name="description" content="crop image with rounded corners" />
+        <meta
+          name="keywords"
+          content="crop image, crop picture, crop image in rounded rectangle, add rounded corners"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
