@@ -1,23 +1,12 @@
-// 组件
-// Upload
-// Stage
-// Cropper
-// ControlBar
-// Preview
-
 import { RecoilRoot } from "recoil"
 import ControlBar from "./ControlBar"
 import Stage from "./Stage"
 
-// 状态
-// img {w, h, nw, nh}
-// cropper rect{ x, y, w, h } radius
-
 const Header = () => {
   return (
-    <div className="max-w-[768px] mx-auto font-bold text-lg p-2">
-      <span className="text-cadmium-orange">RR</span>
-      <span className="text-titanium-yellow ">Crop</span>
+    <div className="max-w-[768px] mx-auto font-bold text-lg px-4 py-3">
+      <img className="inline" src="/logo.svg" alt="" width="30" />
+      <img className="inline ml-2" src="/title.png" alt="" width="108" />
     </div>
   )
 }
