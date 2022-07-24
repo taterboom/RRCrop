@@ -133,7 +133,7 @@ const RadiusHandler = (props: RadiusHandlerProps) => {
       {/* handle for radius */}
       {/* down的时候才能比min小，from不能比min小 */}
       <div
-        className="area-append absolute w-3 h-3 border border-midnight-blue bg-air-blue/60 rounded-full touch-none rotate-45"
+        className="area-append absolute w-3 h-3 border border-midnight-blue bg-air-blue/60 rounded-full touch-none rotate-45 cursor-pointer"
         {...(props.type === 0b11 && bindTopLeftRadius())}
         {...(props.type === 0b01 && bindTopRightRadius())}
         {...(props.type === 0b10 && bindBottomLeftRadius())}
@@ -173,7 +173,7 @@ const CornerHandler = (props: CornerHandlerProps) => {
     <>
       {/* handle for position */}
       <div
-        className="area-append absolute w-3 h-3 border border-midnight-blue bg-air-blue -translate-x-1/2 -translate-y-1/2 touch-none"
+        className="area-append absolute w-3 h-3 border border-midnight-blue bg-air-blue -translate-x-1/2 -translate-y-1/2 touch-none cursor-pointer"
         {...(props.type == 0b11 && bindTopLeft())}
         {...(props.type == 0b01 && bindTopRight())}
         {...(props.type == 0b10 && bindBottomLeft())}
@@ -188,6 +188,7 @@ const CornerHandler = (props: CornerHandlerProps) => {
 }
 
 type CropperProps = {
+  seletable?: boolean
   children?: React.ReactNode
   onTap?: () => void
 }

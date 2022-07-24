@@ -78,8 +78,8 @@ const Raw = (props: RawProps) => {
                 height={img.height}
               ></img>
               <Cropper
+                seletable={isInitial}
                 onTap={() => {
-                  console.log(isInitial)
                   if (isInitial) {
                     const inputEl = document.createElement("input")
                     inputEl.type = "file"

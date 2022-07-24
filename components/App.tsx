@@ -4,7 +4,7 @@ import Stage from "./Stage"
 
 const Header = () => {
   return (
-    <div className="max-w-[768px] mx-auto font-bold text-lg px-4 py-3">
+    <div className="max-w-[768px] mx-auto font-bold text-lg px-4 py-3 md:text-center">
       <img className="inline" src="/logo.svg" alt="" width="30" />
       <img className="inline ml-2" src="/title.png" alt="" width="108" />
     </div>
