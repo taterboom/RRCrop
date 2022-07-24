@@ -3,7 +3,7 @@ import { configState, cropperState, imgState } from "../store"
 import { usePressRepeatly } from "./hooks/usePressRepeatly"
 import { MaterialSymbolsArrow } from "./icons"
 import Button, { ButtonProps } from "./UI/Button"
-import { rectBottom, rectLeft, rectRight, rectTop, roundRect } from "./utils"
+import { rectBottom, rectLeft, rectRight, rectTop } from "./utils"
 import clsx from "classnames"
 
 const DIR_BORDER_RADIUS = {

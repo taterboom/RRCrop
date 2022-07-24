@@ -10,11 +10,9 @@ import {
   IconParkOutlineClear,
   IconParkOutlinePreviewOpen,
   IconParkPreviewCloseOne,
-  UilExport,
 } from "./icons"
 import Button from "./UI/Button"
 import Popup from "./UI/Popup"
-import WithEl from "./UI/WithEl"
 import { containSizeInDocment, roundRect } from "./utils"
 
 // TODO Full JSON config
@@ -35,13 +33,14 @@ const useExport = () => {
         alert("Unsupport Canvas")
         return
       }
+      const maxRadius = Math.min(cropper.width / 2, cropper.height / 2)
       roundRect(
         ctx,
         0,
         0,
         naturalSize(cropper.width),
         naturalSize(cropper.height),
-        naturalSize(cropper.radius)
+        naturalSize(Math.min(cropper.radius, maxRadius))
       )
       ctx.clip()
       ctx.drawImage(
