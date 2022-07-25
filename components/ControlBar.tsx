@@ -140,21 +140,25 @@ const ControlBar = (props: ControlBarProps) => {
 
   return (
     <>
-      <div className="fixed bottom-4 left-1/2 w-full max-w-[768px] p-4 -translate-x-1/2">
+      <div className="fixed bottom-4 left-1/2 w-full max-w-[640px] p-4 -translate-x-1/2">
         <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
           <div className="w-0 flex-1 ">
             <div>
-              <Button onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}>
+              <Button
+                onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}
+                title="preview"
+              >
                 {stage.preview ? <IconParkOutlinePreviewOpen /> : <IconParkPreviewCloseOne />}
               </Button>
             </div>
             <div className=" mt-2">
-              <Button onClick={() => full()}>
+              <Button onClick={() => full()} title="full">
                 <AntDesignFullscreenOutlined />
               </Button>
             </div>
             <div className=" mt-2">
               <Button
+                title="reset"
                 onClick={() => {
                   resetCropperState()
                   resetImgState()
@@ -170,7 +174,7 @@ const ControlBar = (props: ControlBarProps) => {
           </div>
           <div className="w-0 flex-1">
             <div className=" text-right">
-              <Button onClick={() => onExport()}>
+              <Button onClick={() => onExport()} title="save the cropped image">
                 <IconParkDownPicture />
               </Button>
             </div>

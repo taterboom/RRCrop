@@ -198,3 +198,39 @@ export function IconParkDownPicture(props: SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
+
+export function PhTwitterLogoBold(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      width="1em"
+      height="1em"
+      viewBox="0 0 256 256"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M251.1 67.4A12 12 0 0 0 240 60h-28.2A52 52 0 0 0 116 88v.8c-37.3-11.5-67.2-41-67.5-41.3a12 12 0 0 0-20.3 6.4c-9 49.6 6 83 20.1 102.2a112.3 112.3 0 0 0 22 22.5C55.9 193 36 200.7 35.8 200.8a11.7 11.7 0 0 0-7.2 7.5a12.3 12.3 0 0 0 1.4 10.4c1.9 2.9 13.4 17.3 50 17.3c72.1 0 132.5-55.1 139.3-126.4l29.2-29.1a12.2 12.2 0 0 0 2.6-13.1Zm-51.8 28.4a11.3 11.3 0 0 0-3.5 7.7C191.9 164.3 141 212 80 212a89.4 89.4 0 0 1-12.5-.8c10.4-6.7 22.2-16.1 30.5-28.5a12.1 12.1 0 0 0 1.6-9.8a11.8 11.8 0 0 0-6.2-7.6c-2-1.1-45.6-24.2-43.9-85.4c17.2 13.1 45 30.7 76.5 35.9a12 12 0 0 0 14-11.8V88a28.3 28.3 0 0 1 28.4-28a28 28 0 0 1 25.3 16.8a11.9 11.9 0 0 0 11 7.2h6.3Z"
+      ></path>
+    </svg>
+  )
+}
+
+export function MaterialSymbolsArrowOutwardRounded(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="m16 8.4l-8.875 8.9q-.3.3-.713.3q-.412 0-.712-.3t-.3-.713q0-.412.3-.712L14.6 7H7q-.425 0-.713-.287Q6 6.425 6 6t.287-.713Q6.575 5 7 5h10q.425 0 .712.287Q18 5.575 18 6v10q0 .425-.288.712Q17.425 17 17 17t-.712-.288Q16 16.425 16 16Z"
+      ></path>
+    </svg>
+  )
+}
