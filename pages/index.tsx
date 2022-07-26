@@ -27,7 +27,7 @@ const Home: NextPage = () => {
           href="mailto:xuebagod@gmail.com"
           className="flex items-center h-4 border-b-[1px] border-white/20"
         >
-          send feadback <MaterialSymbolsArrowOutwardRounded style={{ fontSize: 8 }} />
+          send feedback <MaterialSymbolsArrowOutwardRounded style={{ fontSize: 8 }} />
         </a>
         <a
           href="https://twitter.com/didan64037534"
