@@ -10,7 +10,10 @@ const Home: NextPage = () => {
     <div>
       <Head>
         <title>Rounded Rectangle Image Cropping - RRCrop</title>
-        <meta name="description" content="crop image with rounded corners" />
+        <meta
+          name="description"
+          content="crop image in rounded rectangle, add rounded corners to image."
+        />
         <meta
           name="keywords"
           content="crop image, crop picture, crop image in rounded rectangle, add rounded corners"
