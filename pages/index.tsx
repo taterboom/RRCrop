@@ -19,6 +19,7 @@ const Home: NextPage = () => {
           content="crop image, crop picture, crop image in rounded rectangle, add rounded corners"
         />
         <link rel="icon" href="/favicon.ico" />
+        <meta name="baidu-site-verification" content="code-pBCKED8aDh" />
       </Head>
 
       <main>
