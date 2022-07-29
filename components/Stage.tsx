@@ -56,47 +56,45 @@ const Raw = (props: RawProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result.data])
   return (
-    <div>
-      <div className="text-center">
-        <div
-          className="relative inline-block box-content border-8 border-air-blue"
-          style={{
-            width: stage.width,
-            height: stage.height,
-          }}
-        >
-          {result.loading && "loading..."}
-          {img.src && (
-            <>
-              <img
-                className={clsx("block transition-all", {
-                  hidden: stage.preview,
-                })}
-                src={img.src}
-                alt="the pic to be cropped"
-                width={img.width}
-                height={img.height}
-              ></img>
-              <Cropper
-                seletable={isInitial}
-                onTap={() => {
-                  if (isInitial) {
-                    const inputEl = document.createElement("input")
-                    inputEl.type = "file"
-                    inputEl.accept = ".jpg,.jpeg,.png"
-                    inputEl.addEventListener("change", (e) => {
-                      console.log(inputEl.files)
-                      if (inputEl.files?.[0]) {
-                        setInputSrc(URL.createObjectURL(inputEl.files[0]))
-                      }
-                    })
-                    inputEl.click()
-                  }
-                }}
-              ></Cropper>
-            </>
-          )}
-        </div>
+    <div className="text-center select-none fixed w-full">
+      <div
+        className="relative inline-block box-content border-8 border-air-blue"
+        style={{
+          width: stage.width,
+          height: stage.height,
+        }}
+      >
+        {result.loading && "loading..."}
+        {img.src && (
+          <>
+            <img
+              className={clsx("block transition-all", {
+                hidden: stage.preview,
+              })}
+              src={img.src}
+              alt="the pic to be cropped"
+              width={img.width}
+              height={img.height}
+            ></img>
+            <Cropper
+              seletable={isInitial}
+              onTap={() => {
+                if (isInitial) {
+                  const inputEl = document.createElement("input")
+                  inputEl.type = "file"
+                  inputEl.accept = ".jpg,.jpeg,.png"
+                  inputEl.addEventListener("change", (e) => {
+                    console.log(inputEl.files)
+                    if (inputEl.files?.[0]) {
+                      setInputSrc(URL.createObjectURL(inputEl.files[0]))
+                    }
+                  })
+                  inputEl.click()
+                }
+              }}
+            ></Cropper>
+          </>
+        )}
       </div>
     </div>
   )
