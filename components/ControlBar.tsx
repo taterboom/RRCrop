@@ -21,7 +21,7 @@ const useExport = () => {
   const cropper = useRecoilValue(cropperState)
   const imgLoadResult = useLoadImage(img.src)
 
-  const exportImg = useCallback(() => {
+  const exportImg = useCallback(async () => {
     if (imgLoadResult.data) {
       const compressRatio = img.width / img.naturalWidth
       const naturalSize = (size: number) => size / compressRatio
@@ -54,13 +54,26 @@ const useExport = () => {
         naturalSize(cropper.width),
         naturalSize(cropper.height)
       )
-      const downloadTrigger = document.createElement("a")
-      downloadTrigger.href = canvasEl.toDataURL("png")
-      downloadTrigger.download = `rrcrop-${Date.now()}.png`
-      downloadTrigger.click()
+
+      const href = await new Promise<string>((res, rej) => {
+        canvasEl.toBlob((blob) => {
+          if (!blob) {
+            rej()
+          } else {
+            const downloadTrigger = document.createElement("a")
+            const url = URL.createObjectURL(blob)
+            downloadTrigger.href = url
+            downloadTrigger.download = `rrcrop-${Date.now()}.png`
+            setTimeout(() => {
+              downloadTrigger.click()
+            }, 500)
+            res(url)
+          }
+        }, "image/png")
+      })
 
       return {
-        href: downloadTrigger.href,
+        href,
         canvasEl,
       }
     }
@@ -98,6 +111,8 @@ type ControlBarProps = {
   children?: React.ReactNode
 }
 
+type PromiseValue<T> = T extends Promise<infer K> ? K : never
+
 const ControlBar = (props: ControlBarProps) => {
   const [stage, setStageState] = useRecoilState(stageState)
   const resetImgState = useResetRecoilState(imgState)
@@ -106,13 +121,14 @@ const ControlBar = (props: ControlBarProps) => {
   const full = useFull()
   const exportImg = useExport()
   const [exportImgPopupVisible, setExportImgPopupVisible] = useState(false)
-  const currentExportImgResultRef = useRef<ReturnType<typeof exportImg>>()
+  const currentExportImgResultRef = useRef<PromiseValue<ReturnType<typeof exportImg>>>()
   const cropperFromAndToRef = useRef<{ from: Rect; to: Rect }>({
     from: { x: 0, y: 0, width: 0, height: 0 },
     to: { x: 0, y: 0, width: 0, height: 0 },
   })
-  const onExport = () => {
-    currentExportImgResultRef.current = exportImg()!
+  const onExport = async () => {
+    currentExportImgResultRef.current = await exportImg()
+    if (!currentExportImgResultRef.current) return
     const cropperEl = document.getElementById("cropper")!
     const cropperElRect = cropperEl.getBoundingClientRect()
     const from = {
@@ -140,7 +156,7 @@ const ControlBar = (props: ControlBarProps) => {
 
   return (
     <>
-      <div className="fixed bottom-4 left-1/2 w-full max-w-[640px] p-4 -translate-x-1/2">
+      <div className="fixed bottom-4 left-1/2 w-full max-w-[640px] p-4 -translate-x-1/2 select-none">
         <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
           <div className="w-0 flex-1 ">
             <div>

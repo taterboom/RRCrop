@@ -7,7 +7,7 @@ const App = dynamic(() => import("../components/App"), { ssr: false })
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className="fixed">
       <Head>
         <title>Rounded Rectangle Image Cropping - RRCrop</title>
         <meta

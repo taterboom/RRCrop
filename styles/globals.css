@@ -12,7 +12,7 @@ body {
 }
 
 body{
-  min-height: 100vh;
+  /* min-height: 100vh; */
   @apply text-midnight-blue;
   background-image: linear-gradient(-45deg, transparent, rgba(0,0,0,0.3));
   background-repeat: no-repeat;
