@@ -1,4 +1,4 @@
-import { CONTAINER_H_WHITE_SPACE, CONTAINER_V_WHITE_SPACE } from "../constants"
+import { LANDSCAPE_CONTAINER_H_WHITE_SPACE, LANDSCAPE_CONTAINER_V_WHITE_SPACE, PORTRAIT_CONTAINER_H_WHITE_SPACE, PORTRAIT_CONTAINER_V_WHITE_SPACE } from "../constants"
 import { Point, Rect } from "../types/graph"
 
 export function inBrowser() {
@@ -39,11 +39,12 @@ export function containSize(
 
 export function containSizeInDocment(naturalWidth: number, naturalHeight: number) {
   if (!inBrowser()) return [0, 0]
+  const isPortrait = getOrientation() === 'portrait'
   return containSize(
     naturalWidth,
     naturalHeight,
-    document.documentElement.clientWidth - CONTAINER_H_WHITE_SPACE,
-    document.documentElement.clientHeight - CONTAINER_V_WHITE_SPACE
+    document.documentElement.clientWidth - (isPortrait ? PORTRAIT_CONTAINER_H_WHITE_SPACE : LANDSCAPE_CONTAINER_H_WHITE_SPACE),
+    document.documentElement.clientHeight - (isPortrait ? PORTRAIT_CONTAINER_V_WHITE_SPACE : LANDSCAPE_CONTAINER_V_WHITE_SPACE)
   )
 }
 
@@ -109,4 +110,9 @@ export function getFixedAndMovablePoint(
     fixedPoint,
     movablePoint,
   }
+}
+
+export function getOrientation() {
+  if (!inBrowser()) return 'portrait'
+  return document.documentElement.clientHeight > document.documentElement.clientWidth ? 'portrait' : 'landscape'
 }

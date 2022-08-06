@@ -6,11 +6,7 @@ import { useLoadImage } from "./hooks/useLoadImage"
 import { containSize, containSizeInDocment, scaleRect } from "./utils"
 import clsx from "classnames"
 
-type RawProps = {
-  // src?: string
-}
-
-const Raw = (props: RawProps) => {
+const Stage = () => {
   const [inputSrc, setInputSrc] = useState<string>()
   const [img, setImg] = useRecoilState(imgState)
   const setCropper = useSetRecoilState(cropperState)
@@ -58,7 +54,7 @@ const Raw = (props: RawProps) => {
   return (
     <div className="text-center select-none fixed w-full">
       <div
-        className="relative inline-block box-content border-8 border-air-blue"
+        className="relative inline-block box-content drop-shadow-xl"
         style={{
           width: stage.width,
           height: stage.height,
@@ -99,11 +95,5 @@ const Raw = (props: RawProps) => {
     </div>
   )
 }
-
-const Stage = () => (
-  <div>
-    <Raw></Raw>
-  </div>
-)
 
 export default Stage

@@ -110,7 +110,7 @@ const Handle = (props: HandleProps) => {
   )
 
   return (
-    <div className="relative w-[200px] h-[80px] m-4 mx-auto border border-midnight-blue select-none">
+    <div className="relative w-full h-full border border-midnight-blue select-none">
       {/* four border */}
       <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 flex select-none">
         <HandleButton dir="left" {...leftLeadingHandlers}></HandleButton>

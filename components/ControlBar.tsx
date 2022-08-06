@@ -13,7 +13,8 @@ import {
 } from "./icons"
 import Button from "./UI/Button"
 import Popup from "./UI/Popup"
-import { containSizeInDocment, roundRect } from "./utils"
+import { containSizeInDocment, getOrientation, roundRect } from "./utils"
+import clsx from 'classnames'
 
 // TODO Full JSON config
 const useExport = () => {
@@ -154,11 +155,20 @@ const ControlBar = (props: ControlBarProps) => {
     setExportImgPopupVisible(true)
   }
 
+  const isPortrait = getOrientation() === "portrait"
+
+  const exportBtn = <Button onClick={() => onExport()} title="save the cropped image">
+    <IconParkDownPicture />
+  </Button>
+
   return (
     <>
-      <div className="fixed bottom-4 left-1/2 w-full max-w-[640px] p-4 -translate-x-1/2 select-none">
-        <div className="flex justify-between p-3 rounded-2xl bg-white/30 backdrop-blur">
-          <div className="w-0 flex-1 ">
+      <div className={clsx(
+        `fixed p-4 select-none`,
+        isPortrait ? "bottom-4 left-1/2 w-full max-w-[640px] -translate-x-1/2" : "left-0 top-16"
+      )}>
+        <div className={clsx("flex justify-between rounded-2xl bg-white/30 backdrop-blur", isPortrait ? "flex-row p-3" : "flex-col p-6")}>
+          <div className={clsx(isPortrait ? "w-0 flex-1 " : "text-center text-2xl")}>
             <div>
               <Button
                 onClick={() => setStageState((v) => ({ ...v, preview: !v.preview }))}
@@ -184,17 +194,23 @@ const ControlBar = (props: ControlBarProps) => {
                 <IconParkOutlineClear />
               </Button>
             </div>
+            {
+              !isPortrait && <div className=" mt-2">
+                {exportBtn}</div>
+
+            }
           </div>
-          <div>
+          <div className={clsx("m-4 mx-auto ", isPortrait ? "w-[200px] h-[80px]" : "w-[54px] h-[80px] mt-12")}>
             <Handle></Handle>
           </div>
-          <div className="w-0 flex-1">
-            <div className=" text-right">
-              <Button onClick={() => onExport()} title="save the cropped image">
-                <IconParkDownPicture />
-              </Button>
+          {
+            isPortrait &&
+            <div className="w-0 flex-1 ">
+              <div className=" text-right">
+                {exportBtn}
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
 

@@ -1,6 +1,9 @@
 import { RecoilRoot } from "recoil"
 import ControlBar from "./ControlBar"
 import Stage from "./Stage"
+import clsx from "classnames"
+import { MaterialSymbolsArrowOutwardRounded, PhTwitterLogoBold } from "../components/icons"
+import { getOrientation } from "../components/utils"
 
 const Header = () => {
   return (
@@ -11,6 +14,23 @@ const Header = () => {
   )
 }
 
+const Footer = () => {
+  return <footer className={clsx("fixed text-xs flex justify-center text-white/30", getOrientation() === 'portrait' ? "bottom-0 left-0 right-0 pb-1 items-center" : "left-4 top-[476px] flex-col items-start")}>
+    <a
+      href="https://twitter.com/didan64037534"
+      className={"flex items-center h-4 border-b-[1px] border-white/20 pt-0.5"}
+    >
+      <PhTwitterLogoBold />@didan64037534
+    </a>
+    <a
+      href="mailto:xuebagod@gmail.com"
+      className={clsx("flex items-center h-4 border-b-[1px] border-white/20", getOrientation() === 'portrait' ? "ml-3" : "mt-0.5")}
+    >
+      send feedback <MaterialSymbolsArrowOutwardRounded style={{ fontSize: 8 }} />
+    </a>
+  </footer>
+}
+
 const App = () => {
   return (
     <RecoilRoot>
@@ -19,6 +39,7 @@ const App = () => {
       {/* <TouchPad></TouchPad> */}
       {/* <Handle></Handle> */}
       <ControlBar></ControlBar>
+      <Footer></Footer>
     </RecoilRoot>
   )
 }

@@ -2,5 +2,9 @@ export const PLACEMENT_IMG = "/select.png"
 export const PLACEMENT_WIDTH = 776
 export const PLACEMENT_HEIGHT = 765
 
-export const CONTAINER_H_WHITE_SPACE = 48
-export const CONTAINER_V_WHITE_SPACE = 264
+export const PORTRAIT_CONTAINER_H_WHITE_SPACE = 48
+export const PORTRAIT_CONTAINER_V_WHITE_SPACE = 264
+export const LANDSCAPE_CONTAINER_H_WHITE_SPACE = 128
+export const LANDSCAPE_CONTAINER_V_WHITE_SPACE = 96
+export const INITIAL_RADIUS = 32
+export const INITIAL_SCALE = 0.8
