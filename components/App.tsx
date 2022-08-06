@@ -20,7 +20,7 @@ const Footer = () => {
       href="https://twitter.com/didan64037534"
       className={"flex items-center h-4 border-b-[1px] border-white/20 pt-0.5"}
     >
-      <PhTwitterLogoBold />@didan64037534
+      <PhTwitterLogoBold />@didan
     </a>
     <a
       href="mailto:xuebagod@gmail.com"
