@@ -9,7 +9,7 @@ const Button = (props: ButtonProps) => {
     <button
       {...props}
       className={clsx(
-        "inline-block text-base p-2 border border-midnight-blue/30 rounded-lg bg-air-blue/60 hover:bg-air-blue transition",
+        "inline-block p-2 border border-midnight-blue/30 rounded-lg bg-air-blue/60 hover:bg-air-blue transition",
         props.className
       )}
     >

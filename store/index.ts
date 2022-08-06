@@ -1,6 +1,6 @@
 import { atom, selector } from "recoil"
 import { containSizeInDocment, scaleRect } from "../components/utils"
-import { PLACEMENT_HEIGHT, PLACEMENT_IMG, PLACEMENT_WIDTH } from "../constants"
+import { INITIAL_RADIUS, INITIAL_SCALE, PLACEMENT_HEIGHT, PLACEMENT_IMG, PLACEMENT_WIDTH } from "../constants"
 
 const placementSize = containSizeInDocment(PLACEMENT_WIDTH, PLACEMENT_HEIGHT)
 
@@ -11,7 +11,7 @@ const placementCropperScaledRect = scaleRect(
     width: placementSize[0],
     height: placementSize[1],
   },
-  0.76
+  INITIAL_SCALE
 )
 
 export const imgState = atom({
@@ -32,20 +32,20 @@ export const cropperState = atom({
     initialY: placementCropperScaledRect.y,
     initialWidth: placementCropperScaledRect.width,
     initialHeight: placementCropperScaledRect.height,
-    initialRadius: 24,
+    initialRadius: INITIAL_RADIUS,
     x: placementCropperScaledRect.x,
     y: placementCropperScaledRect.y,
     width: placementCropperScaledRect.width,
     height: placementCropperScaledRect.height,
-    radius: 24,
+    radius: INITIAL_RADIUS,
   },
 })
 
 export const configState = atom({
   key: "configState",
   default: {
-    initialScale: 0.8,
-    initialRaidus: 16,
+    initialScale: INITIAL_SCALE,
+    initialRaidus: INITIAL_RADIUS,
     cropperMinWidth: 48,
     cropperMinHeight: 48,
     borderRadiusHandleRadius: 4,
