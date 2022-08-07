@@ -4,6 +4,9 @@ import Stage from "./Stage"
 import clsx from "classnames"
 import { MaterialSymbolsArrowOutwardRounded, PhTwitterLogoBold } from "../components/icons"
 import { getOrientation } from "../components/utils"
+import initSentry from "./sentry"
+
+initSentry()
 
 const Header = () => {
   return (
