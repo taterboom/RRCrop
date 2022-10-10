@@ -2,7 +2,11 @@ import { RecoilRoot } from "recoil"
 import ControlBar from "./ControlBar"
 import Stage from "./Stage"
 import clsx from "classnames"
-import { MaterialSymbolsArrowOutwardRounded, PhTwitterLogoBold } from "../components/icons"
+import {
+  MaterialSymbolsArrowOutwardRounded,
+  PhGithubLogoBold,
+  PhTwitterLogoBold,
+} from "../components/icons"
 import { getOrientation } from "../components/utils"
 import initSentry from "./sentry"
 
@@ -18,20 +22,43 @@ const Header = () => {
 }
 
 const Footer = () => {
-  return <footer className={clsx("fixed text-xs flex justify-center text-white/30", getOrientation() === 'portrait' ? "bottom-0 left-0 right-0 pb-1 items-center" : "left-4 top-[476px] flex-col items-start")}>
-    <a
-      href="https://twitter.com/didan64037534"
-      className={"flex items-center h-4 border-b-[1px] border-white/20 pt-0.5"}
+  return (
+    <footer
+      className={clsx(
+        "fixed text-xs flex justify-center text-white/30",
+        getOrientation() === "portrait"
+          ? "bottom-0 left-0 right-0 pb-1 items-center"
+          : "left-4 top-[476px] flex-col items-start"
+      )}
     >
-      <PhTwitterLogoBold />@didan
-    </a>
-    <a
-      href="mailto:xuebagod@gmail.com"
-      className={clsx("flex items-center h-4 border-b-[1px] border-white/20", getOrientation() === 'portrait' ? "ml-3" : "mt-0.5")}
-    >
-      send feedback <MaterialSymbolsArrowOutwardRounded style={{ fontSize: 8 }} />
-    </a>
-  </footer>
+      <a
+        href="https://twitter.com/didan64037534"
+        className={"flex items-center h-4 border-b-[1px] border-white/20 pt-0.5"}
+      >
+        <PhTwitterLogoBold />
+        @taterboom
+      </a>
+      <a
+        href="https://github.com/taterboom"
+        className={clsx(
+          "flex items-center h-4 border-b-[1px] border-white/20 pt-0.5",
+          getOrientation() === "portrait" ? "ml-3" : "mt-0.5"
+        )}
+      >
+        <PhGithubLogoBold />
+        @taterboom
+      </a>
+      <a
+        href="mailto:xuebagod@gmail.com"
+        className={clsx(
+          "flex items-center h-4 border-b-[1px] border-white/20",
+          getOrientation() === "portrait" ? "ml-3" : "mt-0.5"
+        )}
+      >
+        send feedback <MaterialSymbolsArrowOutwardRounded style={{ fontSize: 8 }} />
+      </a>
+    </footer>
+  )
 }
 
 const App = () => {

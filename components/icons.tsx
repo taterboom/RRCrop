@@ -217,6 +217,17 @@ export function PhTwitterLogoBold(props: SVGProps<SVGSVGElement>) {
   )
 }
 
+export function PhGithubLogoBold(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="1em" height="1em" viewBox="0 0 256 256" {...props}>
+      <path
+        fill="currentColor"
+        d="M216 212a12 12 0 0 1-12-12v-8a36.1 36.1 0 0 0-12.3-27.1A59.9 59.9 0 0 0 212 120v-8a61.1 61.1 0 0 0-7.4-28.8a63.7 63.7 0 0 0-6.2-49.2a12.1 12.1 0 0 0-10.4-6a64 64 0 0 0-50 24h-20a64 64 0 0 0-50-24a12.1 12.1 0 0 0-10.4 6a63.7 63.7 0 0 0-6.2 49.2A61.1 61.1 0 0 0 44 112v8a59.9 59.9 0 0 0 20.3 44.9A36.1 36.1 0 0 0 52 192v8a12 12 0 0 1-12 12a12 12 0 0 0 0 24a36 36 0 0 0 36-36v-8a12 12 0 0 1 12-12h8v36a12 12 0 0 1-12 12a12 12 0 0 0 0 24a36 36 0 0 0 36-36v-36h16v36a36 36 0 0 0 36 36a12 12 0 0 0 0-24a12 12 0 0 1-12-12v-36h8a12 12 0 0 1 12 12v8a36 36 0 0 0 36 36a12 12 0 0 0 0-24ZM68 112a38.3 38.3 0 0 1 6.1-20.1a11.6 11.6 0 0 0 1.6-11.5a39.4 39.4 0 0 1-.4-27.7a39.6 39.6 0 0 1 26.4 17.8a12.1 12.1 0 0 0 10.1 5.5h32.4a12.1 12.1 0 0 0 10.1-5.5a39.6 39.6 0 0 1 26.4-17.8a39.4 39.4 0 0 1-.4 27.7a11.9 11.9 0 0 0 1.6 11.5A37.5 37.5 0 0 1 188 112v8a36 36 0 0 1-36 36h-48a36 36 0 0 1-36-36Z"
+      ></path>
+    </svg>
+  )
+}
+
 export function MaterialSymbolsArrowOutwardRounded(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
